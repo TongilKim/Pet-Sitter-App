@@ -48,6 +48,7 @@ function Navbar(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [badgeInVisible, setBadgeInVisible] = useState(true);
+
   const logout = (event) => {
     axios
       .post('/users/logout')
@@ -76,31 +77,55 @@ function Navbar(props) {
     if (token !== null) {
       axios.get(`/profile/ref/${props.userID}`).then(({ data }) => {
         setProfileImg(`${process.env.REACT_APP_S3_IMAGE_URL + data.profileImg}`);
+        const currentUser = data;
 
-        // If current user is on Sitter//
-        // Get available requests by using current sitter ID
-        axios.get(`/request/getSitterRequest/5f12210308f7260dab867b09`).then(({ data }) => {
-          if (data !== null) {
-            // you have request
-            // connect to IO
-            var socket = socketIOClient(process.env.REACT_APP_SOCKET_IO_SERVER);
+        //If sitter request is available
+        axios.get(`/request/getSitterRequest/${currentUser._id}`).then(({ data }) => {
+          if (data.length !== 0) {
+            console.log('you have owner request');
+            var socket = socketIOClient.connect(process.env.REACT_APP_SOCKET_IO_SERVER);
             if (socket !== undefined) {
-              socket.emit('getRequest', data);
+              socket.emit('updateRequests', data);
               socket.on('requestsFromOwner', function (requests) {
-                if (requests !== null) {
-                  setBadgeInVisible(false);
+                if (requests.length > 0) {
                   for (let i = 0; i < requests.length; i++) {
-                    setNotifications((notification) => [...notification, requests[i]]);
+                    if (!requests[i].readStatus) {
+                      setBadgeInVisible(false);
+                      setNotifications((notification) => [...notification, requests[i]]);
+                    }
                   }
                 }
               });
             }
+          } else {
+            axios.get(`/request/getConfirmedRequest/${currentUser.userID}`).then(({ data }) => {
+              if (data.length !== 0) {
+                var socket = socketIOClient.connect(process.env.REACT_APP_SOCKET_IO_SERVER);
+                console.log('you have sitter confirm');
+                socket.emit('updateConfirms', data);
+                socket.on('confirmsFromSitter', function (requests) {
+                  if (requests.length > 0) {
+                    for (let i = 0; i < requests.length; i++) {
+                      if (
+                        (requests[i].acceptedStatus && !requests[i].readStatus) ||
+                        (requests[i].declinedStatus && !requests[i].readStatus)
+                      ) {
+                        setBadgeInVisible(false);
+                        console.log('requests in Navbar: ', requests[i]);
+                        setNotifications((notification) => [...notification, requests[i]]);
+                      }
+                    }
+                  }
+                });
+              }
+            });
           }
         });
+
         setLoggedIn(true);
       });
     }
-  }, [props.userID]);
+  }, [props]);
 
   const { classes } = props;
   const openNotification = Boolean(anchorEl);

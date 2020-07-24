@@ -51,12 +51,14 @@ export default function JobComponent(props) {
   const [start, setStart] = useState();
   const [end, setEnd] = useState();
   const [jobKey, setKey] = useState();
+  const [profileImg, setProfileImg] = useState(null);
 
   useEffect(() => {
     setAccepted(props.booking.accepted);
     setDeclined(props.booking.declined);
     setStart(moment(props.booking.start).format('YYYY-MM-DDTHH:mm'));
     setEnd(moment(props.booking.end).format('YYYY-MM-DDTHH:mm'));
+    setProfileImg(process.env.REACT_APP_S3_IMAGE_URL + props.booking.ownerProfile[0].profileImg);
     setKey(props.jobKey);
   }, [props]);
 
@@ -97,12 +99,7 @@ export default function JobComponent(props) {
               </Typography>
             </CardContent>
             <CardContent className={classes.contents}>
-              <Avatar
-                aria-label="recipe"
-                className={classes.avatar}
-                alt="T"
-                src="/images/profile_3.jpg"
-              />
+              <Avatar aria-label="recipe" className={classes.avatar} alt="T" src={profileImg} />
               <Typography variant="h6" className={classes.name} gutterBottom>
                 {fullName}
               </Typography>

@@ -89,6 +89,7 @@ export default function RequestComponent(props) {
   const [modalOpen, setModalOpen] = useState(false);
   const [reqSuccess, setSuccess] = useState(false);
   const [reqError, setError] = useState(false);
+  const [profileImg, setProfileImg] = useState(null);
   const cost = 14;
 
   useEffect(() => {
@@ -98,6 +99,7 @@ export default function RequestComponent(props) {
     setEnd(moment(props.booking.end).format('YYYY-MM-DDTHH:mm'));
     setModStart(moment(props.booking.start).format('YYYY-MM-DDTHH:mm'));
     setModEnd(moment(props.booking.end).format('YYYY-MM-DDTHH:mm'));
+    setProfileImg(process.env.REACT_APP_S3_IMAGE_URL + props.booking.sitterProfile[0].profileImg);
   }, [props]);
 
   const fullName =
@@ -185,12 +187,7 @@ export default function RequestComponent(props) {
           )}
         </CardContent>
         <CardContent className={classes.contents}>
-          <Avatar
-            aria-label="recipe"
-            className={classes.avatar}
-            alt="T"
-            src="/images/profile_3.jpg"
-          />
+          <Avatar aria-label="recipe" className={classes.avatar} alt="T" src={profileImg} />
           <Typography variant="h6" className={classes.name} gutterBottom>
             {fullName}
           </Typography>

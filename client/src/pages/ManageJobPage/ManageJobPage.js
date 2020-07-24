@@ -17,6 +17,7 @@ import axios from 'axios';
 import moment from 'moment';
 import JobComponent from './JobComponent';
 import BlankComponent from './BlankComponent';
+import socketIOClient from 'socket.io-client';
 
 function Alert(props) {
   return <MuiAlert elevation={7} variant="filled" {...props} />;
@@ -153,10 +154,14 @@ function ManageJobPage(props) {
       .put(`/job/${bookings[jobKey]._id}`, request)
       .then((res) => {
         if (!res.data.error) {
+          var socket = socketIOClient(process.env.REACT_APP_SOCKET_IO_SERVER);
+
           if (res.data.accepted) {
+            socket.emit('addConfirmNotify', res);
             setAccept(true);
             bookings[jobKey].accepted = true;
           } else {
+            socket.emit('addConfirmNotify', res);
             setDecline(true);
             bookings[jobKey].declined = true;
           }
@@ -187,7 +192,7 @@ function ManageJobPage(props) {
               aria-label="recipe"
               className={classes.avatar}
               alt="T"
-              src="/images/profile_3.jpg"
+              src={process.env.REACT_APP_S3_IMAGE_URL + bookings[jobKey].ownerProfile[0].profileImg}
             />
             <Typography variant="h1" align="left" className={classes.name}>
               {bookings[jobKey].ownerProfile[0].firstName}{' '}
