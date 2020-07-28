@@ -1,0 +1,102 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, Courier New, monospace;
+}
+.Calendar {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.Calendar .head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 8px;
+}
+.Calendar .head button {
+  cursor: pointer;
+  outline: none;
+  display: inline-flex;
+  background: transparent;
+  border: none;
+  font-size: 20pt;
+  padding: 4px;
+  border-radius: 4px;
+}
+.Calendar .head button:hover {
+  background-color: hsla(0, 0%, 50.2%, 0.1);
+}
+.Calendar .head button:active {
+  background-color: hsla(0, 0%, 50.2%, 0.2);
+}
+.Calendar .head span.title {
+  cursor: pointer;
+  border-radius: 5px;
+  padding: 4px 12px;
+}
+.Calendar .head span.title:hover {
+  background-color: hsla(0, 0%, 50.2%, 0.1);
+}
+.Calendar .head span.title:active {
+  background-color: hsla(0, 0%, 50.2%, 0.2);
+}
+.Calendar .body .row {
+  display: flex;
+  cursor: pointer;
+}
+.Calendar .body .row:first-child {
+  cursor: auto;
+}
+.Calendar .body .row:first-child .box {
+  font-weight: 700;
+}
+.Calendar .body .row:first-child .box:hover > span.text {
+  background-color: #fff;
+}
+.Calendar .body .row .box {
+  position: relative;
+  display: inline-flex;
+  width: 14.28571%;
+  height: 0;
+  padding-bottom: 14.28571%;
+  font-size: 12pt;
+}
+.Calendar .body .row .box:first-child {
+  color: red;
+}
+.Calendar .body .row .box:last-child {
+  color: #588dff;
+}
+.Calendar .body .row .box.grayed {
+  color: grey;
+}
+.Calendar .body .row .box:hover span.text {
+  background-color: rgba(88, 141, 255, 0.1);
+}
+.Calendar .body .row .box.today span.text {
+  background-color: rgba(255, 0, 0, 0.1);
+}
+.Calendar .body .row .box.selected span.text {
+  background-color: #588dff;
+  color: #fff;
+}
+.Calendar .body .row .box span.text {
+  border-radius: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 60%;
+  height: 60%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+/*# sourceMappingURL=main.aa7d5773.chunk.css.map */

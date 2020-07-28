@@ -19,7 +19,7 @@ const { json, urlencoded } = express;
 
 // mongoose connection
 mongoose.Promise = global.Promise;
-mongoose.connect(process.env.DATABASE_CONNECT, {
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
@@ -76,5 +76,13 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.json({ error: err });
 });
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static('client/build'));
+
+  app.get('*', (req, res) => {
+    res.sendFile(join(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 module.exports = app;
