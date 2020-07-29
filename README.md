@@ -1,4 +1,8 @@
 # Dog Sitter Seek App
+**_Contents:_**
+[About](About)
+[Authors](Authors)
+[Features](Features)
 
 # About
 A website that makes it easier for dog owners to find a dog sitter in real time. It's an easy-to-use website that helps dog owners find dog sitters they need it most. We want dog owners fell secure, comfortable and at ease with their decision to book a dog sitter.
