@@ -5,7 +5,7 @@
 * [Features](#Features)
 
 # About
-A website that makes it easier for dog owners to find a dog sitter in real-time. It's an easy-to-use website that helps dog owners find dog sitters they need it most. We want dog owners feel secure, comfortable and at ease with their decision to book a dog sitter.
+A website that makes it easier for dog owners to find a dog sitter in real-time. It's an easy-to-use website that helps dog owners find dog sitters they need it most. We want dog owners to feel secure, comfortable and at ease with their decision to book a dog sitter.
 Also, the website allows anyone to join a dog sitter role to make extra money.
 
 ### Technology Stack
