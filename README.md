@@ -84,11 +84,11 @@ Also, the website allows anyone to join a dog sitter role to make extra money.
 ### Notification
 ---
 <div>
- <img src="https://user-images.githubusercontent.com/35641052/88824090-44f17680-d19c-11ea-9d05-a82a1602d4f2.gif"></img> 
+ <img src="https://user-images.githubusercontent.com/35641052/88824090-44f17680-d19c-11ea-9d05-a82a1602d4f2.gif" height="400px" width="800px"></img> 
 </div>
 
 ### Real-Time Chat
 ---
 <div>
- <img src="https://user-images.githubusercontent.com/35641052/89691381-3cf1af00-d8df-11ea-9863-f1d3f26e23ea.gif"></img> 
+ <img src="https://user-images.githubusercontent.com/35641052/89691381-3cf1af00-d8df-11ea-9863-f1d3f26e23ea.gif" height="400px" width="800px"></img> 
 </div>
