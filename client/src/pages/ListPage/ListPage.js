@@ -110,7 +110,7 @@ function ListPage(props) {
                         size="small"
                         color="primary"
                         component={Link}
-                        to={{ pathname: '/details', userID: props.userID, sitterID: sitter._id }}
+                        to={{ pathname: '/details', userID: props.userID, sitterID: sitter.userID }}
                       >
                         View Profile
                       </Button>

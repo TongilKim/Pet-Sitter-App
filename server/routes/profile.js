@@ -6,7 +6,6 @@ const express = require('express');
 const router = express.Router();
 const Profile = require('../models/profileModel');
 const User = require('../models/userModel');
-const profileInputValidator = require('../validator');
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.AWS_ID,
@@ -120,7 +119,7 @@ router.get('/list/:id', (req, res) => {
 
 // GET a profile by id
 router.get('/:id', (req, res) => {
-  Profile.findOne({ _id: req.params.id }, (err, foundProfile) => {
+  Profile.findOne({ userID: req.params.id }, (err, foundProfile) => {
     if (err) {
       res.status(404).send('Profile not found!');
     } else {

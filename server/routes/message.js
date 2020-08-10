@@ -18,44 +18,57 @@ router.post('/conversation/add', (req, res) => {
 });
 
 router.post('/add', (req, res) => {
-  const message = new Message(req.body);
-  message.save((err) => {
-    if (err) {
-      return res.status(400);
-    } else {
-      return res.status(200).send('Message created!');
-    }
-  });
-});
-
-router.post('/', (req, res) => {
   Conversation.findOne(
-    { participants: { $all: [req.body.partner, req.body.me] } },
+    { participants: { $all: [req.body.partner, req.body.sender] } },
     (err, conversation) => {
       if (err) {
-        res.status(404).send('No conversation were found!');
+        res.status(404).send('Error found!');
       } else {
-        // res.status(200).send(conversation);
-        if (conversation === null) {
-          Message.find({ conversation_id: conversation.id }, (err, messages) => {
+        if (conversation !== null) {
+          const message = new Message(req.body);
+          message.save((err, newMsg) => {
             if (err) {
-              res.status(404).send('No messages were found!');
+              return res.status(400);
+            }
+            return res.status(200).send(newMsg);
+          });
+        } else {
+          console.log('current conversation is not available');
+          const newConversation = new Conversation({
+            participants: [req.body.partner, req.body.sender],
+          });
+          newConversation.save(function (err, c) {
+            if (err) {
+              console.log(err);
             } else {
-              res.status(200).send(messages);
+              const message = new Message({
+                sender: req.body.sender,
+                content: req.body.content,
+                conversation_id: c._id,
+              });
+              message.save((err, newMsg) => {
+                if (err) {
+                  return res.status(400);
+                } else {
+                  return res.status(200).send(newMsg);
+                }
+              });
             }
           });
-        } else res.status(404).send('No messages were found!');
+        }
       }
     }
   );
 });
 
-// Message.find({ conversation_id: req.params.id }, (err, messages) => {
-//   if (err) {
-//     res.status(404).send('No profiles were found!');
-//   } else {
-//     res.status(200).send(messages);
-//   }
-// });
+router.get('/:id', (req, res) => {
+  Message.find({ conversation_id: req.params.id }, (err, messages) => {
+    if (err) {
+      res.status(404).send('No messages were found!');
+    } else {
+      res.status(200).send(messages);
+    }
+  });
+});
 
 module.exports = router;

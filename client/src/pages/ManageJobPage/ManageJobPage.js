@@ -86,7 +86,7 @@ function ManageJobPage(props) {
     axios
       .get(`/profile/ref/${props.userID}`)
       .then(({ data }) => {
-        setProfileID(data._id);
+        setProfileID(data.userID);
       })
       .then(
         axios.get(`/job/${profileID}`).then(({ data }) => {
@@ -154,7 +154,7 @@ function ManageJobPage(props) {
       .put(`/job/${bookings[jobKey]._id}`, request)
       .then((res) => {
         if (!res.data.error) {
-          var socket = socketIOClient(process.env.REACT_APP_SOCKET_IO_SERVER + '/confirm');
+          var socket = socketIOClient(process.env.REACT_APP_SOCKET_IO_SERVER);
 
           if (res.data.accepted) {
             socket.emit('addConfirmNotify', res);

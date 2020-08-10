@@ -9,9 +9,23 @@ const client = require('socket.io').listen(4000);
 var async = require('async');
 const ObjectId = mongoose.Types.ObjectId;
 
+let users = {};
+var people = {};
 // Connect to Socket.io
-client.of('/request').on('connection', function (socket) {
+client.sockets.on('connection', function (socket) {
   let requestArry = [];
+  let confirmedArry = [];
+
+  socket.on('newUser', function (userId) {
+    if (userId !== null) {
+      socket.userID = userId;
+      people[userId] = socket.id;
+      users[socket.userID] = socket;
+      console.log(Object.keys(users));
+      console.log('people: ', Object.keys(people));
+    }
+  });
+
   socket.on('updateRequests', function (requests) {
     async.each(
       requests,
@@ -37,6 +51,7 @@ client.of('/request').on('connection', function (socket) {
   });
 
   socket.on('addRequestNotify', function (request) {
+    // have requests collection object
     Profile.findOne({ userID: request.data.user_id }, (err, user) => {
       if (user) {
         Request.findOne({ user_id: user.userID }, (err, req) => {
@@ -47,33 +62,39 @@ client.of('/request').on('connection', function (socket) {
             requestedDate: req.start,
           };
           requestArry.push(userObj);
-          socket.broadcast.emit('requestsFromOwner', requestArry);
+          let receiverId = Object.keys(users).find((t) => t === request.data.sitter_id);
+          console.log('request sitter id: ', request.data.sitter_id);
+          console.log('current user in socket: ', Object.keys(users));
+          console.log('receiverId', receiverId);
+          if (receiverId) {
+            console.log('emitting..', people[receiverId]);
+            //users[receiverId].emit('requestsFromOwner', requestArry);
+            client.sockets.to(people[receiverId]).emit('requestsFromOwner', requestArry);
+          }
         });
       }
     });
   });
-});
-
-client.of('/confirm').on('connection', function (socket) {
-  let confirmedArry = [];
 
   socket.on('updateConfirms', function (requests) {
     async.each(
       requests,
       function (request, callback) {
-        Profile.findOne({ userID: request.user_id }, (err, user) => {
+        Profile.findOne({ userID: request.sitter_id }, (err, user) => {
           Request.findOne({ user_id: user.userID }, (err, req) => {
-            let userObj = {
-              requestID: request._id,
-              firstName: user.firstName,
-              profileImg: user.profileImg,
-              requestedDate: req.start,
-              readStatus: request.readByOwner,
-              acceptedStatus: request.accepted,
-              declinedStatus: request.declined,
-            };
-            confirmedArry.push(userObj);
-            callback(null);
+            if (req !== null) {
+              let userObj = {
+                requestID: request._id,
+                firstName: user.firstName,
+                profileImg: user.profileImg,
+                requestedDate: req.start,
+                readStatus: request.readByOwner,
+                acceptedStatus: request.accepted,
+                declinedStatus: request.declined,
+              };
+              confirmedArry.push(userObj);
+              callback(null);
+            }
           });
         });
       },
@@ -84,9 +105,9 @@ client.of('/confirm').on('connection', function (socket) {
   });
 
   socket.on('addConfirmNotify', function (request) {
-    Profile.findOne({ _id: request.data.sitter_id }, (err, user) => {
+    Profile.findOne({ userID: request.data.sitter_id }, (err, user) => {
       if (user) {
-        Request.findOne({ sitter_id: user._id }, (err, req) => {
+        Request.findOne({ sitter_id: user.userID }, (err, req) => {
           let userObj = {
             requestID: request.data._id,
             firstName: user.firstName,
@@ -96,10 +117,23 @@ client.of('/confirm').on('connection', function (socket) {
             declinedStatus: request.data.declined,
           };
           confirmedArry.push(userObj);
-          socket.broadcast.emit('confirmsFromSitter', confirmedArry);
+          let receiverId = Object.keys(users).find((t) => t === request.data.user_id);
+          if (receiverId) {
+            users[receiverId].emit('confirmsFromSitter', confirmedArry);
+          }
         });
       }
     });
+  });
+  socket.on('newMessage', function (participant) {
+    let receiverId = Object.keys(users).find((t) => t === participant.partner);
+    if (receiverId) {
+      users[receiverId].emit('receivedMessage', participant.newMsg);
+    }
+  });
+  socket.once('disconnect', function () {
+    console.log('disconnected');
+    delete users[socket.userID];
   });
 });
 
@@ -147,7 +181,7 @@ router.get('/:id', (req, res) => {
         $lookup: {
           from: 'profiles',
           localField: 'sitter_id',
-          foreignField: '_id',
+          foreignField: 'userID',
           as: 'sitterProfile',
         },
       },
@@ -172,7 +206,7 @@ router.get('/accepted/:id', (req, res) => {
         $lookup: {
           from: 'profiles',
           localField: 'sitter_id',
-          foreignField: '_id',
+          foreignField: 'userID',
           as: 'sitterProfile',
         },
       },
@@ -217,10 +251,13 @@ router.put('/readOwnerRequest/:id', (req, res) => {
 
 // Update a readByOwner status if owner read sitter's confirm notification.
 router.put('/readSitterConfirm/:id', (req, res) => {
+  console.log('id: ', req.params.id);
   Request.findOne({ _id: req.params.id }, (err, request) => {
     if (err) {
+      console.log('error notify');
       res.status(404).send('Request not found!');
     } else {
+      console.log('clicked confirm notify');
       request.readByOwner = true;
       request.save(function (err, request) {
         if (err) {

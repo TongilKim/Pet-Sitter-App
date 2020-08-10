@@ -46,6 +46,7 @@ function Navbar(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [badgeInVisible, setBadgeInVisible] = useState(true);
+
   const logout = (event) => {
     axios
       .post('/users/logout')
@@ -71,57 +72,61 @@ function Navbar(props) {
 
   useEffect(() => {
     const token = localStorage.getItem('loginToken');
+    var socket = socketIOClient.connect(process.env.REACT_APP_SOCKET_IO_SERVER);
+
     if (token !== null) {
       axios.get(`/profile/ref/${props.userID}`).then(({ data }) => {
         setProfileImg(`${process.env.REACT_APP_S3_IMAGE_URL + data.profileImg}`);
         const currentUser = data;
 
-        axios.get(`/request/getSitterRequest/${currentUser._id}`).then(({ data }) => {
-          if (data.length !== 0) {
-            var socket = socketIOClient.connect(
-              process.env.REACT_APP_SOCKET_IO_SERVER + '/request'
-            );
-            if (socket !== undefined) {
-              socket.emit('updateRequests', data);
-              socket.on('requestsFromOwner', function (requests) {
-                if (requests.length > 0) {
-                  for (let i = 0; i < requests.length; i++) {
-                    if (!requests[i].readStatus) {
-                      setBadgeInVisible(false);
-                      Object.assign(requests[i], { notifyMsg: 'has requested your service' });
-                      setNotifications((notification) => [...notification, requests[i]]);
-                    }
-                  }
+        // Noti for sitter request
+        axios.get(`/request/getSitterRequest/${currentUser.userID}`).then(({ data }) => {
+          socket.emit('newUser', currentUser.userID);
+          socket.emit('updateRequests', data);
+          socket.on('requestsFromOwner', function (requests) {
+            console.log('you got a request');
+            if (requests.length > 0) {
+              for (let i = 0; i < requests.length; i++) {
+                if (!requests[i].readStatus) {
+                  setBadgeInVisible(false);
+                  Object.assign(requests[i], {
+                    notifyMsg: 'has requested your service',
+                    userRole: 'Dog Owner',
+                  });
+                  setNotifications((notification) => [...notification, requests[i]]);
                 }
-              });
-            }
-          } else {
-            axios.get(`/request/getConfirmedRequest/${currentUser.userID}`).then(({ data }) => {
-              if (data.length !== 0) {
-                var socket = socketIOClient.connect(
-                  process.env.REACT_APP_SOCKET_IO_SERVER + '/confirm'
-                );
-                socket.emit('updateConfirms', data);
-                socket.on('confirmsFromSitter', function (requests) {
-                  if (requests.length > 0) {
-                    for (let i = 0; i < requests.length; i++) {
-                      if (requests[i].acceptedStatus && !requests[i].readStatus) {
-                        setBadgeInVisible(false);
-                        Object.assign(requests[i], { notifyMsg: 'has accepted your request' });
-                        setNotifications((notification) => [...notification, requests[i]]);
-                      }
-                      if (requests[i].declinedStatus && !requests[i].readStatus) {
-                        setBadgeInVisible(false);
-                        Object.assign(requests[i], { notifyMsg: 'has declined your request' });
-                        setNotifications((notification) => [...notification, requests[i]]);
-                      }
-                    }
-                  }
-                });
               }
-            });
-          }
+            }
+          });
         });
+        axios.get(`/request/getConfirmedRequest/${currentUser.userID}`).then(({ data }) => {
+          // Noti for accepted/denied request
+          socket.emit('newUser', currentUser.userID);
+          socket.emit('updateConfirms', data);
+          socket.on('confirmsFromSitter', function (requests) {
+            if (requests.length > 0) {
+              for (let i = 0; i < requests.length; i++) {
+                if (requests[i].acceptedStatus && !requests[i].readStatus) {
+                  setBadgeInVisible(false);
+                  Object.assign(requests[i], {
+                    notifyMsg: 'has accepted your request',
+                    userRole: 'Dog sitter',
+                  });
+                  setNotifications((notification) => [...notification, requests[i]]);
+                }
+                if (requests[i].declinedStatus && !requests[i].readStatus) {
+                  setBadgeInVisible(false);
+                  Object.assign(requests[i], {
+                    notifyMsg: 'has declined your request',
+                    userRole: 'Dog sitter',
+                  });
+                  setNotifications((notification) => [...notification, requests[i]]);
+                }
+              }
+            }
+          });
+        });
+
         setLoggedIn(true);
       });
     }

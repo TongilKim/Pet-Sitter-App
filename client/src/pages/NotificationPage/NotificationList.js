@@ -29,44 +29,30 @@ const useStyles = makeStyles((theme) => ({
 export default function NotificationList(props) {
   const classes = useStyles();
   const [notifications, setNotifications] = useState([]);
-  const [ownerLogedIn, setOwnerLogedIn] = useState(false);
-  const [notifyMsg, setNotifyMsg] = useState('');
-  const [userRole, setUserRole] = useState('');
 
   const handleRequestClick = (event) => {
     const currentRequestID = event.currentTarget.getAttribute('value');
-
-    if (ownerLogedIn) {
-      // I'm Owner
-      axios.put(`/request/readSitterConfirm/${currentRequestID}`).then((response) => {
-        if (!response.data.error) {
-          history.push('/requests');
-          window.location.reload();
-        }
-      });
-    } else {
-      // I'm sitter
-      axios.put(`/request/readOwnerRequest/${currentRequestID}`).then((response) => {
-        if (!response.data.error) {
-          history.push('/jobs');
-          window.location.reload();
-        }
-      });
-    }
+    axios.get(`/request/ref/${currentRequestID}`).then((response) => {
+      if (response.data.accepted || response.data.declined) {
+        axios.put(`/request/readSitterConfirm/${currentRequestID}`).then((response) => {
+          if (!response.data.error) {
+            history.push('/requests');
+            window.location.reload();
+          }
+        });
+      } else {
+        axios.put(`/request/readOwnerRequest/${currentRequestID}`).then((response) => {
+          if (!response.data.error) {
+            history.push('/jobs');
+            window.location.reload();
+          }
+        });
+      }
+    });
   };
 
   useEffect(() => {
-    if (props.notifications.length !== 0) {
-      if (Object.keys(props.notifications[0]).length > 5) {
-        setNotifications(props.notifications);
-        setOwnerLogedIn(true);
-        setUserRole('Dog Owner');
-      } else {
-        setNotifications(props.notifications);
-        setOwnerLogedIn(false);
-        setUserRole('Dog sitting');
-      }
-    }
+    setNotifications(props.notifications);
   }, [props]);
   return (
     <>
@@ -93,7 +79,7 @@ export default function NotificationList(props) {
                       primary={`${notification.firstName} ${notification.notifyMsg}`}
                       secondary={
                         <Fragment>
-                          <Typography variant="body2">{userRole}</Typography>
+                          <Typography variant="body2">{notification.userRole}</Typography>
                           <Typography
                             variant="body1"
                             className={classes.inline}

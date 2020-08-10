@@ -26,7 +26,11 @@ class App extends Component {
   componentDidMount() {
     this.getUser();
   }
+  // changeProfileImage(newImgUrl) {
+  //   this.setState({
 
+  //   })
+  // }
   getUser() {
     axios.get('/users/').then((response) => {
       if (response.data.user) {
@@ -61,7 +65,7 @@ class App extends Component {
             <MessagePage userID={this.state.userId} />
           </Route>
           <Route path="/profile">
-            <ProfilePage userID={this.state.userId} />
+            <ProfilePage userID={this.state.userId} updateProfileImg={this.getUser} />
           </Route>
           <Route path="/details" component={SitterDetailPage} />
         </Switch>

@@ -84,11 +84,12 @@ function Photo(props) {
         .post(`/profile/uploadPhoto/${sitter.userID}`, formData)
         .then((res) => {
           if (!res.data.error) {
+            console.log();
             setImgUrl(res.data.Location);
             setFile('');
             setFileName('');
             setOnSuccesful(true);
-            // window.location.reload();
+            props.updateProfileImg();
           }
         })
         .catch((error) => {

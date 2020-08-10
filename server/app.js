@@ -12,6 +12,7 @@ const paymentRouter = require('./routes/payment');
 const requestRouter = require('./routes/request');
 const jobRouter = require('./routes/job');
 const messageRouter = require('./routes/message');
+const conversationRouter = require('./routes/conversation');
 const passport = require('./passport');
 const session = require('express-session');
 
@@ -60,7 +61,7 @@ app.use('/payment', paymentRouter);
 app.use('/request', requestRouter);
 app.use('/job', jobRouter);
 app.use('/message', messageRouter);
-
+app.use('/conversation', conversationRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));

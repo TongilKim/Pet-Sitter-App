@@ -80,7 +80,7 @@ function ProfilePage(props) {
                     <Edit userID={props.userID} />
                   </Route>
                   <Route path="/profile/photo">
-                    <Photo userID={props.userID} />
+                    <Photo userID={props.userID} updateProfileImg={props.updateProfileImg} />
                   </Route>
                   <Route path="/profile/album">
                     <Album userID={props.userID} />

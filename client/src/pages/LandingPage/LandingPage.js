@@ -1,17 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import {
-  makeStyles,
-  Typography,
-  Grid,
-  CardContent,
-  Paper,
-  Avatar,
-  TextField,
-  Button,
-  Divider,
-} from '@material-ui/core';
+import React, { useState } from 'react';
+import { makeStyles, Typography, Grid, TextField, Button } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
-import DateRangeIcon from '@material-ui/icons/DateRange';
+
 import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({

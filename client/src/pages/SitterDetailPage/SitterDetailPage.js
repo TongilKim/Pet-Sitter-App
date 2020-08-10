@@ -135,7 +135,7 @@ function SitterDetailPage(props) {
       .post('/request/add', request)
       .then((response) => {
         if (!response.data.error) {
-          var socket = socketIOClient(process.env.REACT_APP_SOCKET_IO_SERVER + '/request');
+          var socket = socketIOClient(process.env.REACT_APP_SOCKET_IO_SERVER);
           socket.emit('addRequestNotify', response);
           handleModalClose();
           setSuccess(true);
@@ -148,7 +148,6 @@ function SitterDetailPage(props) {
 
   useEffect(() => {
     axios.get(`/profile/${props.location.sitterID}`).then(({ data }) => {
-      console.log(props.location.sitterID);
       setSitter(data);
       if (data.profileImg !== undefined) {
         setProfileImg(`${process.env.REACT_APP_S3_IMAGE_URL + data.profileImg}`);
