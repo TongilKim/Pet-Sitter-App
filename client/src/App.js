@@ -26,11 +26,6 @@ class App extends Component {
   componentDidMount() {
     this.getUser();
   }
-  // changeProfileImage(newImgUrl) {
-  //   this.setState({
-
-  //   })
-  // }
   getUser() {
     axios.get('/users/').then((response) => {
       if (response.data.user) {

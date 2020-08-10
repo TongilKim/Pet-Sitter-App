@@ -172,7 +172,6 @@ router.put('/:id', (req, res) => {
           } else {
             // update the user database as well if any related updates available
             User.findOne({ _id: req.params.id }, (err, user) => {
-              // (user.userEmail = email),
               user.firstName = firstName;
               user.lastName = lastName;
 

@@ -10,7 +10,7 @@ var async = require('async');
 const ObjectId = mongoose.Types.ObjectId;
 
 let users = {};
-var people = {};
+
 // Connect to Socket.io
 client.sockets.on('connection', function (socket) {
   let requestArry = [];
@@ -19,10 +19,8 @@ client.sockets.on('connection', function (socket) {
   socket.on('newUser', function (userId) {
     if (userId !== null) {
       socket.userID = userId;
-      people[userId] = socket.id;
+      socket.join(userId);
       users[socket.userID] = socket;
-      console.log(Object.keys(users));
-      console.log('people: ', Object.keys(people));
     }
   });
 
@@ -63,13 +61,9 @@ client.sockets.on('connection', function (socket) {
           };
           requestArry.push(userObj);
           let receiverId = Object.keys(users).find((t) => t === request.data.sitter_id);
-          console.log('request sitter id: ', request.data.sitter_id);
-          console.log('current user in socket: ', Object.keys(users));
-          console.log('receiverId', receiverId);
           if (receiverId) {
-            console.log('emitting..', people[receiverId]);
             //users[receiverId].emit('requestsFromOwner', requestArry);
-            client.sockets.to(people[receiverId]).emit('requestsFromOwner', requestArry);
+            client.sockets.in(receiverId).emit('requestsFromOwner', requestArry);
           }
         });
       }
@@ -119,18 +113,20 @@ client.sockets.on('connection', function (socket) {
           confirmedArry.push(userObj);
           let receiverId = Object.keys(users).find((t) => t === request.data.user_id);
           if (receiverId) {
-            users[receiverId].emit('confirmsFromSitter', confirmedArry);
+            client.sockets.in(receiverId).emit('confirmsFromSitter', confirmedArry);
           }
         });
       }
     });
   });
+
   socket.on('newMessage', function (participant) {
     let receiverId = Object.keys(users).find((t) => t === participant.partner);
     if (receiverId) {
       users[receiverId].emit('receivedMessage', participant.newMsg);
     }
   });
+
   socket.once('disconnect', function () {
     console.log('disconnected');
     delete users[socket.userID];
@@ -251,13 +247,11 @@ router.put('/readOwnerRequest/:id', (req, res) => {
 
 // Update a readByOwner status if owner read sitter's confirm notification.
 router.put('/readSitterConfirm/:id', (req, res) => {
-  console.log('id: ', req.params.id);
   Request.findOne({ _id: req.params.id }, (err, request) => {
     if (err) {
       console.log('error notify');
       res.status(404).send('Request not found!');
     } else {
-      console.log('clicked confirm notify');
       request.readByOwner = true;
       request.save(function (err, request) {
         if (err) {

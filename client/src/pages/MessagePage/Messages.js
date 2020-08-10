@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
   },
   receiveMsg: {
-    // color: theme.palette.primary,
     margin: theme.spacing(1),
     justifyContent: 'flex-start',
     width: '70%',
@@ -91,17 +90,15 @@ export default function Messages(props) {
     axios.get(`/profile/${props.selectedUserID}`).then(({ data }) => {
       setSelectedUser(data);
     });
-    // If user clicked one of the user list, both are not null
+
     if (participant.partner !== null && participant.me !== null) {
       // Check if previous conversation is exist with selected user
       axios
         .post('/conversation', participant)
         .then(({ data }) => {
           let conversationID = data;
-          // If conversation is available previously
           if (conversationID) {
             setCurrentConversationID(conversationID);
-            // Call all messages that available in this conversationID
             axios.get(`/message/${conversationID}`).then(({ data }) => {
               setConversation(data);
             });
@@ -110,7 +107,6 @@ export default function Messages(props) {
         .catch((error) => {
           // IF previous conversation is NOT exist
           if (error.response.statusText === 'Not Found') {
-            // If conversation in NOT available previously
             setCurrentConversationID(null);
             setConversation([]);
           }

@@ -46,7 +46,7 @@ function Navbar(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [badgeInVisible, setBadgeInVisible] = useState(true);
-
+  var socket = socketIOClient.connect(process.env.REACT_APP_SOCKET_IO_SERVER);
   const logout = (event) => {
     axios
       .post('/users/logout')
@@ -54,7 +54,8 @@ function Navbar(props) {
         if (response.status === 200) {
           setLoggedIn(false);
           history.push('/');
-          localStorage.clear();
+          socket.disconnect();
+          sessionStorage.clear();
         }
       })
       .catch((error) => {
@@ -71,8 +72,7 @@ function Navbar(props) {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('loginToken');
-    var socket = socketIOClient.connect(process.env.REACT_APP_SOCKET_IO_SERVER);
+    const token = sessionStorage.getItem('loginToken');
 
     if (token !== null) {
       axios.get(`/profile/ref/${props.userID}`).then(({ data }) => {
@@ -84,7 +84,6 @@ function Navbar(props) {
           socket.emit('newUser', currentUser.userID);
           socket.emit('updateRequests', data);
           socket.on('requestsFromOwner', function (requests) {
-            console.log('you got a request');
             if (requests.length > 0) {
               for (let i = 0; i < requests.length; i++) {
                 if (!requests[i].readStatus) {

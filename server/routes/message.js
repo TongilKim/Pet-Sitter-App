@@ -33,7 +33,6 @@ router.post('/add', (req, res) => {
             return res.status(200).send(newMsg);
           });
         } else {
-          console.log('current conversation is not available');
           const newConversation = new Conversation({
             participants: [req.body.partner, req.body.sender],
           });

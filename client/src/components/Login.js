@@ -57,7 +57,7 @@ function Login(props) {
         })
         .then((response) => {
           if (response.status === 200) {
-            localStorage.setItem('loginToken', response.data.accessToken);
+            sessionStorage.setItem('loginToken', response.data.accessToken);
             setEmail('');
             setPassword('');
             setEmailErr('');
