@@ -21,6 +21,7 @@ import axios from 'axios';
 const useStyles = makeStyles((theme) => ({
   search: {
     padding: theme.spacing(4, 0, 4),
+    marginTop: '120px',
   },
   searchButtons: {
     marginTop: theme.spacing(0),
@@ -61,7 +62,7 @@ function ListPage(props) {
     <React.Fragment>
       <CssBaseline />
       <div className={classes.search}>
-        <Container maxWidth="sm">
+        <Container maxWidth="sm" style={{ marginTop: '120px' }}>
           <Typography component="h1" variant="h1" align="center" gutterBottom>
             Your search results
           </Typography>
@@ -126,7 +127,7 @@ function ListPage(props) {
       </div>
       <footer className={classes.footer}>
         {sitters.length > 0 && (
-          <Button size="large" variant="outlined">
+          <Button size="large" variant="outlined" color="primary">
             Show more
           </Button>
         )}

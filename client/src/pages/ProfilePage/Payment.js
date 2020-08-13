@@ -15,6 +15,19 @@ function Payment() {
       '& > *': {
         width: theme.spacing(100),
         height: theme.spacing(80),
+        marginTop: '100px',
+        marginLeft: '50px',
+      },
+      [theme.breakpoints.down('sm')]: {
+        width: theme.spacing(60),
+        marginLeft: '20px',
+      },
+    },
+    paper: {
+      [theme.breakpoints.down('sm')]: {
+        width: theme.spacing(40),
+        marginLeft: '0px',
+        height: theme.spacing(100),
       },
     },
     box: {
@@ -44,7 +57,7 @@ function Payment() {
   return (
     <Fragment>
       <Container maxWidth="lg" className={classes.root}>
-        <Paper elevation={3}>
+        <Paper elevation={3} className={classes.paper}>
           <Box className={classes.box}>
             <Typography variant="h1" align="center" gutterBottom>
               Payment Methods

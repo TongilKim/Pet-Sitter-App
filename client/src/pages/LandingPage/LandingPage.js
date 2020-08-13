@@ -5,9 +5,25 @@ import SearchIcon from '@material-ui/icons/Search';
 import moment from 'moment';
 
 const useStyles = makeStyles((theme) => ({
-  menu: {
-    marginTop: theme.spacing(10),
-    marginLeft: theme.spacing(25),
+  leftSideContainer: {
+    marginTop: '150px',
+    [theme.breakpoints.down('md')]: {
+      marginTop: '100px',
+    },
+  },
+  leftSide: {
+    marginLeft: '110px',
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: '60px',
+    },
+  },
+  dropInContainer: {},
+  dropOffContainer: {
+    marginLeft: '5%',
+    [theme.breakpoints.down('xs')]: {
+      marginTop: '20px',
+      marginLeft: '0',
+    },
   },
   icon: {
     width: theme.spacing(4),
@@ -16,6 +32,11 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: 60,
     fontWeight: 800,
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 45,
+      textAlign: 'center',
+      marginLeft: '-50px',
+    },
   },
   text: {
     fontSize: 20,
@@ -28,11 +49,14 @@ const useStyles = makeStyles((theme) => ({
   button: {
     width: theme.spacing(28),
     height: theme.spacing(7),
-    marginTop: theme.spacing(2),
-    marginLeft: theme.spacing(4),
+    marginTop: theme.spacing(4),
   },
   img: {
-    height: 844,
+    height: '100%',
+    width: '100%',
+    [theme.breakpoints.down('md')]: {
+      display: 'none',
+    },
   },
 }));
 
@@ -44,17 +68,18 @@ export default function LandingPage() {
   const [end, setEnd] = useState(defaultTime.add(1, 'day').format('YYYY-MM-DDTHH:mm'));
   return (
     <>
-      <Grid container spacing={0} align="center" justify="center">
-        <Grid item xs={6} align="left">
-          <div className={classes.menu}>
-            <Typography variant="h1" align="left" className={classes.title}>
+      <Grid container>
+        {/* half left side*/}
+        <Grid item xs={12} lg={6} className={classes.leftSideContainer}>
+          <div className={classes.leftSide}>
+            <Typography variant="h1" className={classes.title}>
               Find the care
               <br />
               your dog deservers
             </Typography>
 
-            <Grid style={{ margin: '5%' }}>
-              <Typography variant="subtitle1" align="left" gutterBottom className={classes.text}>
+            <Grid style={{ marginTop: '70px' }}>
+              <Typography variant="subtitle1" gutterBottom className={classes.text}>
                 WHERE
               </Typography>
               <SearchIcon className={classes.icon} />
@@ -66,15 +91,10 @@ export default function LandingPage() {
               />
             </Grid>
 
-            <Grid style={{ margin: '5%' }}>
+            <Grid style={{ marginTop: '60px' }}>
               <Grid container>
-                <Grid>
-                  <Typography
-                    variant="subtitle1"
-                    align="left"
-                    gutterBottom
-                    className={classes.text}
-                  >
+                <Grid className={classes.dropInContainer}>
+                  <Typography variant="subtitle1" gutterBottom className={classes.text}>
                     DROP IN
                   </Typography>
                   <TextField
@@ -85,13 +105,8 @@ export default function LandingPage() {
                     onChange={(e) => setStart(e.target.value)}
                   />
                 </Grid>
-                <Grid style={{ marginLeft: '5%' }}>
-                  <Typography
-                    variant="subtitle1"
-                    align="left"
-                    gutterBottom
-                    className={classes.text}
-                  >
+                <Grid className={classes.dropOffContainer}>
+                  <Typography variant="subtitle1" gutterBottom className={classes.text}>
                     DROP OFF
                   </Typography>
                   <TextField
@@ -109,11 +124,12 @@ export default function LandingPage() {
             </Button>
           </div>
         </Grid>
-        <Grid item xs={6} className={classes.img} align="right">
+
+        <Grid item xs={6} className={classes.img}>
           <img
             alt="LovingSitters"
             src="/images/landing.jpg"
-            style={{ width: '85%', height: '100%' }}
+            style={{ width: '100%', height: '100%', filter: 'brightness(90%)', float: 'right' }}
           ></img>
         </Grid>
       </Grid>

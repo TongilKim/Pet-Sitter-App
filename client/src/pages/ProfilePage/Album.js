@@ -17,6 +17,11 @@ export default function Album(props) {
         width: theme.spacing(100),
         height: theme.spacing(80),
       },
+      marginTop: '100px',
+      marginLeft: '50px',
+    },
+    search: {
+      marginTop: '120px',
     },
     box: {
       display: 'flex',

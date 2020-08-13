@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexWrap: 'wrap',
     width: theme.spacing(100),
+    marginTop: '120px',
   },
   topBackground: {
     minHeight: 'calc(50vh - 66px)',
@@ -44,9 +45,16 @@ const useStyles = makeStyles((theme) => ({
   },
   requestForm: {
     flexWrap: 'wrap',
+    marginTop: '120px',
     width: 345,
     height: 400,
     marginLeft: theme.spacing(10),
+    [theme.breakpoints.down('md')]: {
+      marginLeft: theme.spacing(0),
+    },
+  },
+  search: {
+    marginTop: '120px',
   },
   subPhotos: {
     margin: theme.spacing(5),

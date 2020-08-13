@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
+import MenuIcon from '@material-ui/icons/Menu';
 import {
   AppBar,
   Toolbar,
@@ -10,18 +11,27 @@ import {
   Avatar,
   Grid,
   Popover,
+  IconButton,
+  Drawer,
 } from '@material-ui/core';
 import Login from './Login';
 import SignUp from './SignUp';
 import axios from 'axios';
 import NotificationList from '../pages/NotificationPage/NotificationList';
+import MobileNavbar from './MobileNavbar';
 import socketIOClient from 'socket.io-client';
 import history from '../history';
 
 const useStyles = (theme) => ({
   appBar: {
+    top: 0,
     height: theme.spacing(9),
     borderBottom: `1px solid ${theme.palette.divider}`,
+    position: 'fixed',
+    background: 'white',
+    [theme.breakpoints.down('md')]: {
+      height: theme.spacing(9),
+    },
   },
   toolbar: {
     display: 'flex',
@@ -30,13 +40,36 @@ const useStyles = (theme) => ({
   },
   logo: {
     flexGrow: 1,
+    [theme.breakpoints.down('xs')]: {
+      width: '35%',
+    },
+  },
+  logedInLogo: {
+    flexGrow: 1,
   },
   link: {
     margin: theme.spacing(0, 4.5),
+    [theme.breakpoints.down('md')]: {
+      display: 'none',
+    },
+  },
+  logoutBtn: {
+    [theme.breakpoints.down('md')]: {
+      display: 'none',
+    },
+  },
+  menuButton: {
+    display: 'none',
+    [theme.breakpoints.down('md')]: {
+      display: 'block',
+    },
   },
   avatar: {
     width: theme.spacing(6),
     height: theme.spacing(6),
+    [theme.breakpoints.down('md')]: {
+      display: 'none',
+    },
   },
 });
 
@@ -46,6 +79,8 @@ function Navbar(props) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [badgeInVisible, setBadgeInVisible] = useState(true);
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [currentUserName, setCurrentUserName] = useState('');
   var socket = socketIOClient.connect(process.env.REACT_APP_SOCKET_IO_SERVER);
   const logout = (event) => {
     axios
@@ -63,6 +98,10 @@ function Navbar(props) {
       });
   };
 
+  const handleDrawer = () => {
+    setOpenDrawer(!openDrawer);
+  };
+
   const handleNotificationClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -78,7 +117,7 @@ function Navbar(props) {
       axios.get(`/profile/ref/${props.userID}`).then(({ data }) => {
         setProfileImg(`${process.env.REACT_APP_S3_IMAGE_URL + data.profileImg}`);
         const currentUser = data;
-
+        setCurrentUserName(currentUser.firstName);
         // Noti for sitter request
         axios.get(`/request/getSitterRequest/${currentUser.userID}`).then(({ data }) => {
           socket.emit('newUser', currentUser.userID);
@@ -142,7 +181,11 @@ function Navbar(props) {
           <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
             <Toolbar className={classes.toolbar}>
               <Link to="/list">
-                <img src="/images/logo.png" alt="" />
+                <img
+                  src="/images/logo.png"
+                  alt=""
+                  className={setLoggedIn ? classes.logedInLogo : classes.logo}
+                />
               </Link>
               <Grid container alignItems="center" justify="flex-end" direction="row">
                 <Button component={Link} to="/list" className={classes.link}>
@@ -197,10 +240,28 @@ function Navbar(props) {
                   component={Link}
                   to="/"
                   onClick={logout}
+                  className={classes.logoutBtn}
                   style={{ marginLeft: '3%' }}
                 >
                   logout
                 </Button>
+                <IconButton
+                  edge="start"
+                  className={classes.menuButton}
+                  color="primary"
+                  aria-label="menu"
+                  onClick={handleDrawer}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Drawer anchor="right" open={openDrawer} onClose={handleDrawer}>
+                  <MobileNavbar
+                    profileImg={profileImg}
+                    currentUserName={currentUserName}
+                    handleDrawer={handleDrawer}
+                    logout={logout}
+                  />
+                </Drawer>
               </Grid>
             </Toolbar>
           </AppBar>
@@ -210,16 +271,8 @@ function Navbar(props) {
           <CssBaseline />
           <AppBar position="static" color="default" elevation={0} className={classes.appBar}>
             <Toolbar className={classes.toolbar}>
-              <img src="/images/logo.png" alt="" />
+              <img src="/images/logo.png" alt="" className={classes.logo} />
               <Grid container alignItems="center" justify="flex-end" direction="row" spacing={4}>
-                <Link
-                  href="#"
-                  color=""
-                  underline="always"
-                  style={{ marginRight: '35px', fontWeight: '700', color: '#ff0000' }}
-                >
-                  BECOME A SITTER
-                </Link>
                 <Login />
                 <SignUp />
               </Grid>

@@ -12,6 +12,9 @@ const useStyles = makeStyles((theme) => ({
     height: 50,
     padding: theme.spacing(1),
   },
+  search: {
+    marginTop: '120px',
+  },
   contents: {
     padding: theme.spacing(0.5),
   },

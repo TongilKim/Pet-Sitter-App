@@ -8,6 +8,13 @@ const useStyles = makeStyles((theme) => ({
   list: {
     height: 800,
     overflow: 'auto',
+    marginTop: '120px',
+    [theme.breakpoints.down('xs')]: {
+      height: 450,
+    },
+  },
+  search: {
+    marginTop: '120px',
   },
   header: {
     padding: theme.spacing(3.5),
@@ -21,6 +28,14 @@ const useStyles = makeStyles((theme) => ({
     width: 900,
     height: 600,
     marginLeft: theme.spacing(1),
+    marginTop: '120px',
+    [theme.breakpoints.down('xs')]: {
+      width: 450,
+      marginLeft: theme.spacing(0),
+    },
+    [theme.breakpoints.down('md')]: {
+      width: 700,
+    },
   },
   messageGrid: {
     height: '80%',

@@ -24,9 +24,17 @@ function Alert(props) {
 }
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  jobListContainer: {
     flexWrap: 'wrap',
-    width: theme.spacing(50),
+    [theme.breakpoints.down('xs')]: {
+      width: '250',
+    },
+  },
+  search: {
+    marginTop: '120px',
+  },
+  jobDetailContainer: {
+    marginTop: '120px',
   },
   list: {
     width: 400,
@@ -38,7 +46,9 @@ const useStyles = makeStyles((theme) => ({
   },
   titleTop: {
     marginTop: theme.spacing(1),
-    marginLeft: theme.spacing(1),
+    [theme.breakpoints.down('sm')]: {
+      marginTop: theme.spacing(2),
+    },
   },
   title: {
     marginTop: theme.spacing(2),
@@ -50,6 +60,15 @@ const useStyles = makeStyles((theme) => ({
     height: 600,
     marginLeft: theme.spacing(5),
     padding: theme.spacing(1),
+    [theme.breakpoints.down('sm')]: {
+      width: 500,
+      height: 700,
+      marginLeft: theme.spacing(0),
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: 300,
+      marginLeft: theme.spacing(0),
+    },
   },
   avatar: {
     width: theme.spacing(13),
@@ -186,9 +205,6 @@ function ManageJobPage(props) {
         process.env.REACT_APP_S3_IMAGE_URL + bookings[jobKey].ownerProfile[0].profileImg;
       return (
         <>
-          <Typography variant="h6" align="left" className={classes.titleTop}>
-            REQUEST DETAIL:
-          </Typography>
           <Grid container style={{ marginTop: '3%' }}>
             <Avatar aria-label="recipe" className={classes.avatar} alt="" src={profileImg} />
             <Typography variant="h1" align="left" className={classes.name}>
@@ -205,9 +221,14 @@ function ManageJobPage(props) {
             SITTNG SCHEDULE:
           </Typography>
           <Grid container>
-            <Typography variant="h5" className={classes.titleTop}>
-              {moment(bookings[jobKey].start).format('D MMM YYYY, hh:mmA')} -{' '}
-              {moment(bookings[jobKey].end).format('D MMM YYYY, hh:mmA')}
+            <Typography
+              variant="h5"
+              className={classes.titleTop}
+              align="left"
+              style={{ backgroundColor: '#FFFACD' }}
+            >
+              <b> {moment(bookings[jobKey].start).format('D MMM YYYY, hh:mmA')}</b> ~{' '}
+              <b>{moment(bookings[jobKey].end).format('D MMM YYYY, hh:mmA')}</b>
             </Typography>
           </Grid>
           <Typography
@@ -220,7 +241,7 @@ function ManageJobPage(props) {
           </Typography>
           <Grid container>
             <Typography variant="h5" className={classes.titleTop}>
-              ${bookings[jobKey].cost}
+              <b>${bookings[jobKey].cost}</b>
             </Typography>
           </Grid>
           <Typography
@@ -282,18 +303,26 @@ function ManageJobPage(props) {
 
   return bookings ? (
     <>
-      <Grid container spacing={0} align="center" justify="center" style={{ marginTop: '1%' }}>
-        <Grid maxwidth="md" className={classes.root}>
+      <Grid container spacing={0} align="center" justify="center">
+        <Grid
+          item
+          xs={12}
+          lg={6}
+          xl={4}
+          className={classes.jobListContainer}
+          style={{ marginTop: '120px' }}
+        >
           <Card className={classes.list}>
             <CardContent className={classes.contents}>{handleRequests()}</CardContent>
           </Card>
         </Grid>
-        <div>
+        <Grid item xs={12} lg={6} xl={4} className={classes.jobDetailContainer}>
           <Grid container spacing={0} align="center" justify="center">
             <Paper className={classes.jobDetail}>{showDetail()}</Paper>
           </Grid>
-        </div>
+        </Grid>
       </Grid>
+
       <Snackbar open={jobAccepted} autoHideDuration={1500} onClose={handleMessageClose}>
         <Alert onClose={handleMessageClose} severity="success">
           Request accepted successfully!

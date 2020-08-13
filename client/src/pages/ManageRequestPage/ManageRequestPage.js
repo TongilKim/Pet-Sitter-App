@@ -27,11 +27,18 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
     marginLeft: theme.spacing(1),
   },
+  search: {
+    marginTop: '120px',
+  },
   calendar: {
     flexWrap: 'wrap',
     width: 380,
     height: 400,
     marginLeft: theme.spacing(5),
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: theme.spacing(0),
+      height: 500,
+    },
   },
 }));
 
@@ -78,13 +85,13 @@ function ManageRequestPage(props) {
   };
 
   return bookings ? (
-    <Grid container spacing={0} align="center" justify="center" style={{ marginTop: '1%' }}>
-      <Grid maxwidth="md" className={classes.root}>
+    <Grid container spacing={0} align="center" justify="center">
+      <Grid maxwidth="md" className={classes.root} style={{ marginTop: '120px' }}>
         <Card className={classes.list}>
           <CardContent className={classes.contents}>{handleRequests()}</CardContent>
         </Card>
       </Grid>
-      <Card className={classes.calendar}>
+      <Card className={classes.calendar} style={{ marginTop: '120px' }}>
         <Calendar />
       </Card>
     </Grid>

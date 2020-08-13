@@ -18,6 +18,14 @@ const useStyles = makeStyles((theme) => ({
     width: '70%',
     display: 'flex',
   },
+  sendBtn: {
+    width: '150px',
+    height: '45px',
+    marginTop: '5.5%',
+    [theme.breakpoints.down('xs')]: {
+      width: '95px',
+    },
+  },
   receiveMsg: {
     margin: theme.spacing(1),
     justifyContent: 'flex-start',
@@ -183,7 +191,7 @@ export default function Messages(props) {
           <Button
             variant="contained"
             color="primary"
-            style={{ width: '150px', height: '45px', marginTop: '5.5%' }}
+            className={classes.sendBtn}
             onClick={sendMessage}
           >
             SEND

@@ -36,7 +36,7 @@ function CardComponent(props) {
   };
 
   return (
-    <Grid container item xs={6}>
+    <Grid container item xs={12} md={6} alignItems="center" justify="flex-end" direction="row">
       <Card variant="outlined" className={classes.box}>
         <CardHeader
           avatar={

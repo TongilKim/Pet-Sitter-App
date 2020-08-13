@@ -8,8 +8,6 @@ import {
   Divider,
   Paper,
   Avatar,
-  TextField,
-  Box,
   Button,
   Snackbar,
   Dialog,
@@ -32,10 +30,14 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     width: theme.spacing(50),
   },
+  search: {
+    marginTop: '120px',
+  },
   list: {
     width: 400,
     height: 600,
     overflow: 'auto',
+    marginTop: '120px',
   },
   contents: {
     padding: theme.spacing(1),
@@ -52,8 +54,13 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: 'wrap',
     width: 700,
     height: 600,
+    marginTop: '120px',
     marginLeft: theme.spacing(5),
     padding: theme.spacing(1),
+    [theme.breakpoints.down('xs')]: {
+      width: 400,
+      marginLeft: theme.spacing(0),
+    },
   },
   avatar: {
     width: theme.spacing(13),

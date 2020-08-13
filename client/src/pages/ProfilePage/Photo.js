@@ -22,6 +22,21 @@ const useStyles = makeStyles((theme) => ({
       width: theme.spacing(100),
       height: theme.spacing(80),
     },
+    [theme.breakpoints.down('md')]: {
+      width: theme.spacing(80),
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: theme.spacing(60),
+    },
+    [theme.breakpoints.down('xs')]: {
+      width: theme.spacing(20),
+      marginLeft: '0px',
+    },
+    marginTop: '100px',
+    marginLeft: '50px',
+  },
+  search: {
+    marginTop: '120px',
   },
   box: {
     display: 'flex',
@@ -34,9 +49,16 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
     paddingLeft: theme.spacing(5),
     paddingRight: theme.spacing(5),
+    [theme.breakpoints.down('xs')]: {
+      width: '100%',
+      marginLeft: '0',
+    },
   },
   deleteBtn: {
     color: theme.palette.text.secondary,
+    [theme.breakpoints.down('xs')]: {
+      width: '100%',
+    },
   },
   saveBtn: {
     margin: theme.spacing(2),

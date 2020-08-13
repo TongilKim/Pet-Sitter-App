@@ -27,10 +27,27 @@ const useStyles = makeStyles((theme) => ({
       width: theme.spacing(100),
       height: theme.spacing(130),
     },
+
+    marginTop: '100px',
+    marginLeft: '50px',
+  },
+  search: {
+    marginTop: '120px',
+  },
+  paper: {
+    [theme.breakpoints.down('sm')]: {
+      height: theme.spacing(170),
+    },
   },
   grid: {
     flexGrow: 1,
     padding: theme.spacing(5),
+  },
+  flexibleTitle: {
+    align: 'right',
+    [theme.breakpoints.down('xs')]: {
+      align: 'left',
+    },
   },
   label: {
     padding: theme.spacing(2),
@@ -156,7 +173,7 @@ function Edit(props) {
   return dataLoaded ? (
     <Fragment>
       <Container maxwidth="lg" className={classes.root}>
-        <Paper elevation={3}>
+        <Paper elevation={3} className={classes.paper}>
           <form onSubmit={handleSubmit}>
             <Grid container spacing={3} className={classes.grid}>
               <Grid item xs={12}>
@@ -165,16 +182,15 @@ function Edit(props) {
                 </Typography>
               </Grid>
 
-              <Grid container item xs={12}>
-                <Grid item xs={3} className={classes.label}>
-                  <Typography variant="h6" align="right" gutterBottom>
+              <Grid container item xs={12} lg={9} xl={9}>
+                <Grid item xs={6} md={3} lg={4} xl={4} className={classes.label}>
+                  <Typography variant="h6" className={classes.flexibleTitle} gutterBottom>
                     FIRST NAME
                   </Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={6} md={5} lg={6} xl={8}>
                   <TextField
                     id="firstName"
-                    style={{ margin: 0 }}
                     placeholder="First Name"
                     fullWidth
                     margin="normal"
@@ -189,16 +205,15 @@ function Edit(props) {
                 </div>
               </Grid>
 
-              <Grid container item xs={12}>
-                <Grid item xs={3} className={classes.label}>
-                  <Typography variant="h6" align="right" gutterBottom>
+              <Grid container item xs={12} lg={9} xl={9}>
+                <Grid item xs={6} md={3} lg={4} xl={4} className={classes.label}>
+                  <Typography variant="h6" className={classes.flexibleTitle} gutterBottom>
                     LAST NAME
                   </Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={6} md={5} lg={6} xl={8}>
                   <TextField
                     id="lastName"
-                    style={{ margin: 0 }}
                     placeholder="Last Name"
                     fullWidth
                     margin="normal"
@@ -212,13 +227,13 @@ function Edit(props) {
                 </div>
               </Grid>
 
-              <Grid container item xs={12}>
-                <Grid item xs={3} className={classes.label}>
-                  <Typography variant="h6" align="right" gutterBottom>
+              <Grid container item xs={12} lg={9} xl={9}>
+                <Grid item xs={6} md={3} lg={4} xl={4} className={classes.label}>
+                  <Typography variant="h6" className={classes.flexibleTitle} gutterBottom>
                     GENDER
                   </Typography>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={6} md={5} lg={6} xl={8}>
                   <FormControl variant="outlined" className={classes.formControl} fullWidth>
                     <Select
                       labelId="demo-simple-select-outlined-label"
@@ -234,16 +249,17 @@ function Edit(props) {
                 </Grid>
               </Grid>
 
-              <Grid container item xs={12}>
-                <Grid item xs={3} className={classes.label}>
-                  <Typography variant="h6" align="right" gutterBottom>
+              <Grid container item xs={12} lg={9} xl={9}>
+                <Grid item xs={12} md={3} lg={4} xl={4} className={classes.label}>
+                  <Typography variant="h6" gutterBottom className={classes.flexibleTitle}>
                     BIRTH DATE
                   </Typography>
                 </Grid>
-                <Grid item xs={8} className={classes.label}>
+                <Grid item xs={12} md={5} lg={6} xl={8} className={classes.label}>
                   <TextField
                     id="date"
                     type="date"
+                    style={{ marginTop: 0 }}
                     className={classes.textField}
                     InputLabelProps={{
                       shrink: true,
@@ -254,17 +270,17 @@ function Edit(props) {
                 </Grid>
               </Grid>
 
-              <Grid container item xs={12}>
-                <Grid item xs={3} className={classes.label}>
-                  <Typography variant="h6" align="right" gutterBottom>
+              <Grid container item xs={12} lg={9} xl={9}>
+                <Grid item xs={12} md={3} lg={4} xl={4} className={classes.label}>
+                  <Typography variant="h6" className={classes.flexibleTitle} gutterBottom>
                     EMAIL ADDRESS
                   </Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={12} md={5} lg={6} xl={8}>
                   <TextField
+                    style={{ margin: 0 }}
                     disabled
                     id="email"
-                    style={{ margin: 0 }}
                     fullWidth
                     margin="normal"
                     variant="filled"
@@ -273,13 +289,13 @@ function Edit(props) {
                 </Grid>
               </Grid>
 
-              <Grid container item xs={12}>
-                <Grid item xs={3} className={classes.label}>
-                  <Typography variant="h6" align="right" gutterBottom>
+              <Grid container item xs={12} lg={9} xl={9}>
+                <Grid item xs={12} md={3} lg={4} xl={4} className={classes.label}>
+                  <Typography variant="h6" className={classes.flexibleTitle} gutterBottom>
                     PHONE NUMBER
                   </Typography>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={12} md={5} lg={6} xl={6}>
                   <InputMask
                     mask="999 999 9999"
                     defaultValue={'000 000 0000'}
@@ -308,49 +324,47 @@ function Edit(props) {
                 </Grid>
               </Grid>
 
-              <Grid container item xs={12}>
-                <Grid item xs={3} className={classes.label}>
-                  <Typography variant="h6" align="right" gutterBottom>
+              <Grid container item xs={12} lg={9} xl={9}>
+                <Grid item xs={12} md={3} lg={4} xl={4} className={classes.label}>
+                  <Typography variant="h6" className={classes.flexibleTitle} gutterBottom>
                     WHERE YOU LIVE
                   </Typography>
                 </Grid>
-                <Grid item xs={8}>
-                  <Grid item xs={8}>
-                    <TextField
-                      id="address"
-                      style={{ margin: 0 }}
-                      placeholder="Address"
-                      fullWidth
-                      margin="normal"
-                      variant="outlined"
-                      defaultValue={address}
-                      onChange={(e) => setAddress(e.target.value)}
-                    />
-                  </Grid>
+
+                <Grid item xs={12} md={5} lg={6} xl={6}>
+                  <TextField
+                    id="address"
+                    style={{ margin: 0 }}
+                    placeholder="Address"
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    defaultValue={address}
+                    onChange={(e) => setAddress(e.target.value)}
+                  />
                 </Grid>
               </Grid>
 
-              <Grid container item xs={12}>
-                <Grid item xs={3} className={classes.label}>
-                  <Typography variant="h6" align="right" gutterBottom>
+              <Grid container item xs={12} lg={9} xl={9}>
+                <Grid item xs={12} md={3} lg={4} xl={4} className={classes.label}>
+                  <Typography variant="h6" className={classes.flexibleTitle} gutterBottom>
                     DESCRIBE YOUR SELF
                   </Typography>
                 </Grid>
-                <Grid item xs={8}>
-                  <Grid item xs={8}>
-                    <TextField
-                      id="address"
-                      style={{ margin: 0 }}
-                      placeholder="About you"
-                      fullWidth
-                      multiline
-                      rows={8}
-                      margin="normal"
-                      variant="outlined"
-                      defaultValue={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                    />
-                  </Grid>
+
+                <Grid item xs={12} md={5} lg={6} xl={8}>
+                  <TextField
+                    id="address"
+                    style={{ margin: 0 }}
+                    placeholder="About you"
+                    fullWidth
+                    multiline
+                    rows={8}
+                    margin="normal"
+                    variant="outlined"
+                    defaultValue={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                  />
                 </Grid>
               </Grid>
             </Grid>

@@ -37,6 +37,10 @@ const useStyles = (theme) => ({
     fontWeight: '900',
     fontSize: '12px',
   },
+  loginBtn: {
+    marginRight: '17px',
+    color: '#DF1B1B',
+  },
 });
 
 function Login(props) {
@@ -108,7 +112,7 @@ function Login(props) {
         variant="outlined"
         color="primary"
         onClick={() => setOpen(!open)}
-        style={{ marginRight: '17px' }}
+        className={classes.loginBtn}
       >
         LOGIN
       </Button>

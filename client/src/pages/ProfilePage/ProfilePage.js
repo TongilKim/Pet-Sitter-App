@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.secondary,
     width: '100%',
     maxWidth: 360,
+    marginTop: '100px',
   },
   listItem: {
     padding: theme.spacing(3),
